@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invest & Trade</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <header class="bg-blue-900 text-white p-4 text-center text-xl font-bold">
+    Invest & Trade Platform
+  </header>
+  <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Market Watchlist -->
+    <section class="bg-white shadow p-4 rounded col-span-2">
+      <h2 class="text-lg font-semibold mb-2">Market Watchlist</h2>
+      <table class="w-full border">
+        <thead class="bg-gray-200">
+          <tr><th class="p-2">Symbol</th><th class="p-2">Price ($)</th></tr>
+        </thead>
+        <tbody id="watchlist"></tbody>
+      </table>
+    </section>
+    <!-- Buy/Sell Form -->
+    <section class="bg-white shadow p-4 rounded">
+      <h2 class="text-lg font-semibold mb-2">Trade</h2>
+      <form id="tradeForm" class="space-y-2">
+        <input type="text" placeholder="Symbol" id="symbol" class="border p-2 w-full" required />
+        <input type="number" placeholder="Quantity" id="quantity" class="border p-2 w-full" required />
+        <select id="action" class="border p-2 w-full">
+          <option value="buy">Buy</option>
+          <option value="sell">Sell</option>
+        </select>
+        <button class="bg-blue-600 text-white p-2 rounded w-full">Submit</button>
+      </form>
+    </section>
+    <!-- Chart -->
+    <section class="bg-white shadow p-4 rounded col-span-3">
+      <h2 class="text-lg font-semibold mb-2">Price Chart</h2>
+      <canvas id="priceChart" height="100"></canvas>
+    </section>
+  </main>
+  <script>
+    const watchlist = [
+      { symbol: 'AAPL', price: 150.12 },
+      { symbol: 'TSLA', price: 720.55 },
+      { symbol: 'BTC', price: 45000.33 },
+      { symbol: 'ETH', price: 3100.25 }
+    ];
+    function renderWatchlist() {
+      const tbody = document.getElementById('watchlist');
+      tbody.innerHTML = '';
+      watchlist.forEach(item => {
+        const row = `<tr class='border-t'><td class='p-2'>${item.symbol}</td><td class='p-2'>${item.price.toFixed(2)}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+    renderWatchlist();
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        datasets: [{ label: 'Price', data: [150, 152, 149, 153, 151], borderColor: 'blue', fill: false }]
+      }
+    });
+    document.getElementById('tradeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert(`Order placed: ${document.getElementById('action').value} ${document.getElementById('quantity').value} shares of ${document.getElementById('symbol').value}`);
+    });
+  </script>
+</body>
+</html>
